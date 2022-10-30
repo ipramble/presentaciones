@@ -1,0 +1,133 @@
+# Set up aliases
+# interesting repos
+#
+#  https://gist.github.com/mikowl/c400ac3f30b5ee0d76a4f08db49ead34
+#  https://matt.blissett.me.uk/linux/zsh/zshrc
+#  https://gist.github.com/zanshin/1142739
+#  https://gist.github.com/Gram21/35dc66c4673bb63fa8c1
+#
+
+
+
+# --- New Relic
+
+alias reposneteng="cd; cd 0.newrelic/repos/neteng/"
+alias reposcfraga="cd; cd 0.newrelic/repos/cfraga"
+
+alias vault_us="newrelic-vault us login -method=okta username=cfraga"
+alias vault_eu="newrelic-vault eu login -method=okta username=cfraga"
+
+# ---
+
+# --- Directory operations (https://gist.github.com/dotCipher/60c933c7da8a319db8bc)
+
+alias ..='cd ..'
+alias ..2='cd ../..'
+alias ..3='cd ../../..'
+alias ..4='cd ../../../..'
+alias ..5='cd ../../../../..'
+
+# --- List Directory contents
+
+alias ll="ls -lh"
+alias la="ls -ah"
+alias lla="ls -lah"
+
+# --- TREE
+
+alias tr1="tree -L 1"
+alias tr2="tree -L 2"
+alias tr3="tree -L 3"
+
+
+# --- osc show battery status
+
+alias show_battery_status='pmset -g batt | egrep "([0-9]+\%).*" -o --colour=auto'
+
+
+# --- Other Repos Directories
+
+alias ipramble="cd /Users/cfraga/1.carlos/repos/ipramble"
+
+
+# --- NETWORKING
+# myIP address (https://gist.github.com/zanshin/1142739)
+
+alias show_open_ports="lsof -i -n -P | more"
+
+
+function iplan(){
+     echo
+     Lo0=$(ifconfig lo0 | grep 'inet ' | sed -e 's/:/ /' | awk '{print "Loopback0 --> " $2}')
+     echo $Lo0
+     WiFiv4=$(ifconfig en0 | grep 'inet ' | sed -e 's/:/ /' | awk '{print "Wi-Fi (IPv4) - en0 --> " $2 " - " $3 " " $4 " - " $5 " " $6}')
+     echo $WiFiv4
+     WiFiv6=$(ifconfig en0 | grep 'inet6 ' | sed -e 's/ / /' | awk '{print "Wi-Fi (IPv6) - en0 --> " $2 " - " $3 " " $4 " - " $5 " " $6}')
+     echo $WiFiv6
+     Wiredv4=$(ifconfig en6 | grep 'inet ' | sed -e 's/:/ /' | awk '{print "Wired (IPv4) - en1 --> " $2 " - " $3 " " $4 " - " $5 " " $6}')
+     echo $Wiredv4
+     Wiredv6=$(ifconfig en6 | grep 'inet6 ' | sed -e 's/ / /' | awk '{print "Wired (IPv6) - en1 --> " $2 " - " $3 " " $4 " - " $5 " " $6}')
+     echo $Wiredv6
+     echo
+}
+ 
+ 
+function ipwan(){
+      echo
+      ip_wan=$(curl -s http://ipecho.net/plain; echo) 
+      #ip_wan=$(curl ipinfo.io 2>/dev/null | jq '.ip' | sed 's/"//g')
+      ip_org=$(curl ipinfo.io 2>/dev/null | jq '.org' | sed 's/"//g')
+      ip_rpki=$(whois -h rr.ntt.net "${ip_wan}"  | egrep rpki-ov-state | awk '{print $2}')
+      echo "IP WAN --> $ip_wan"
+      #echo AS --> $aa
+      echo "ORGANISATION --> $ip_org"
+      echo "RPKI state --> $ip_rpki"
+      echo
+      }
+
+
+        #alias ipwan2='curl -s http://ipecho.net/plain > /dev/null ; echo'
+
+
+# check
+# https://gist.github.com/mikowl/c400ac3f30b5ee0d76a4f08db49ead34
+
+
+# --- GIT
+
+
+alias gcl="git clone"
+alias gs="git status"
+alias gp="git pull"
+alias ga="git add"
+alias gcm="git commit -ma"
+alias gtl="git log"
+alias gtfr="git fetch && git rebase"
+alias gtb="git branch"
+alias gtco="git checkout"
+alias gtf="git fetch"
+alias gtcl="git branch | grep -v "master" | xargs git branch -D" #remove all branchs keeping master branch 
+
+
+# https://gist.github.com/Gram21/35dc66c4673bb63fa8c1
+#
+# Upgrade brew stuff, pip stuff and radare
+#
+updateAndUpgrade() {
+    echo "Start updating and upgrading. This may take a while"
+    upgrade_oh_my_zsh
+    echo "****************************************************************"
+    echo "brew..."
+    brew update --verbose && brew upgrade && brew cleanup
+#    echo "****************************************************************"
+#   echo "pip..."
+#    pip list --format=legacy --outdated | cut -d ' ' -f1 | xargs -n1 python2 /usr/local/lib/python2.7/site-packages/pip install -U
+#    pip list --format=legacy --outdated | cut -d ' ' -f1 | xargs -n1 sudo -H python2 /usr/local/lib/python2.7/site-packages/pip install -U
+    # echo "****************************************************************"
+    # echo "radare2..."
+    # cd "$HOME/repos/radare2"
+    # sys/user.sh
+    # cd - > /dev/null;
+}
+
+
